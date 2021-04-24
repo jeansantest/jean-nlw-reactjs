@@ -16,6 +16,8 @@ export function Player() {
     isPlaying,
     togglePlay,
     setPlayingState,
+    playNext,
+    playPrevious,
   } = useContext(PlayerContext);
 
   useEffect(() => {
@@ -24,11 +26,11 @@ export function Player() {
     }
 
     if (isPlaying) {
-      audioRef.current.play()
+      audioRef.current.play();
     } else {
-      audioRef.current.pause()
+      audioRef.current.pause();
     }
-  }, [isPlaying])
+  }, [isPlaying]);
 
   const episode = episodeList[currentEpisodeIndex];
 
@@ -73,13 +75,21 @@ export function Player() {
           <span>00:00</span>
         </div>
 
-        {episode && <audio src={episode.url} ref={audioRef} autoPlay onPlay={() => setPlayingState(true)} onPause={() => setPlayingState(false)} />}
+        {episode && (
+          <audio
+            src={episode.url}
+            ref={audioRef}
+            autoPlay
+            onPlay={() => setPlayingState(true)}
+            onPause={() => setPlayingState(false)}
+          />
+        )}
 
         <div className={styles.buttons}>
           <button type="button" disabled={!episode}>
             <img src="/shuffle.svg" alt="Embaralhar" />
           </button>
-          <button type="button" disabled={!episode}>
+          <button type="button" onClick={playPrevious} disabled={!episode}>
             <img src="/play-previous.svg" alt="Tocar anterior" />
           </button>
           <button
@@ -94,7 +104,7 @@ export function Player() {
               <img src="/play.svg" alt="Tocar" />
             )}
           </button>
-          <button type="button" disabled={!episode}>
+          <button type="button" onClick={playNext} disabled={!episode}>
             <img src="/play-next.svg" alt="Tocar próxima" />
           </button>
           <button type="button" disabled={!episode}>
